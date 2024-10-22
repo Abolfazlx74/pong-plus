@@ -1,4 +1,4 @@
-const canvas = document.getElementById("pongCanvas");
+const canvas = document.getElementById("pong-canvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = 800;
@@ -7,7 +7,10 @@ canvas.height = 400;
 const paddleWidth = 10;
 const paddleHeight = 100;
 const ballSize = 15;
-let righttPlayerScore = 0 
+
+const lScoreContainer = document.getElementById("left-player-score")
+let rightPlayerScore = 0
+const rScoreContainer = document.getElementById("right-player-score")
 let leftPlayerScore = 0
 let ballSpeed = 3;
 
@@ -31,6 +34,19 @@ let ball = {
     dx: ballSpeed * (Math.random() > 0.5 ? 1 : -1),
     dy: ballSpeed * (Math.random() > 0.5 ? 1 : -1)
 };
+
+function updateScores(){
+    lScoreContainer.innerHTML = rightPlayerScore
+    rScoreContainer.innerHTML = leftPlayerScore
+}
+function increaseLeftPlayerScore() {
+    leftPlayerScore++;
+    updateScores()
+}
+function increaseRightPlayerScore() {
+    rightPlayerScore++;
+    updateScores()
+}
 
 function drawPaddle(paddle) {
     ctx.fillStyle = "#fff";
@@ -78,11 +94,11 @@ function moveBall() {
 
     // if the ball goes right or left
     if (ball.x - ballSize / 2 <= 0 ) {
-        righttPlayerScore ++;
+        increaseLeftPlayerScore()
         resetBall();
     }
     if(ball.x + ballSize / 2 >= canvas.width){
-        leftPlayerScore ++;
+        increaseRightPlayerScore()
         resetBall()
     }
 }
@@ -145,3 +161,4 @@ document.addEventListener("keyup", (e) => {
 });
 
 gameLoop();
+updateScores()

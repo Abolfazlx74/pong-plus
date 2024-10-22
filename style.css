@@ -10,6 +10,19 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #000;
+    flex-wrap:wrap ;
+}
+
+.players-scores-container{
+    color: white;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}   
+.players-scores-container h2{
+    margin:  0 5% 0 5% ;
 }
 
 canvas {
