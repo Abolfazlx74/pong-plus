@@ -18,14 +18,14 @@ let leftPaddle = {
     x: 10,
     y: canvas.height / 2 - paddleHeight / 2,
     dy: 0,
-    speed: 6
+    speed: 3
 };
 
 let rightPaddle = {
     x: canvas.width - paddleWidth - 10,
     y: canvas.height / 2 - paddleHeight / 2,
     dy: 0,
-    speed: 6
+    speed: 3
 };
 
 let ball = {
@@ -38,6 +38,8 @@ let ball = {
 function updateScores(){
     lScoreContainer.innerHTML = rightPlayerScore
     rScoreContainer.innerHTML = leftPlayerScore
+    setHitsNumber()
+    ballSpeed = 3;
 }
 function increaseLeftPlayerScore() {
     leftPlayerScore++;
@@ -66,6 +68,19 @@ function movePaddle(paddle) {
     if (paddle.y < 0) paddle.y = 0;
     if (paddle.y + paddleHeight > canvas.height) paddle.y = canvas.height - paddleHeight;
 }
+let hittingRightNumber = 1
+let hittingLefttNumber = 1
+function setHitsNumber(){
+    hittingRightNumber = 1
+    hittingLefttNumber = 1
+}
+
+function reverseMovmentDirection(){
+    ball.dx = ball.dx* -1
+    ballSpeed += .2
+    ball.dx = (ball.dx > 0 ? 1 : -1) * ballSpeed;
+    ball.dy = (ball.dy > 0 ? 1 : -1) * ballSpeed;
+}
 
 function moveBall() {
     ball.x += ball.dx;
@@ -78,18 +93,26 @@ function moveBall() {
 
     // Dealing with paddles
     if (
-        ball.x - ballSize / 2 <= leftPaddle.x + paddleWidth &&
-        ball.y >= leftPaddle.y &&
-        ball.y <= leftPaddle.y + paddleHeight
+        ball.x <= leftPaddle.x +10&&
+        (leftPaddle.y-6)<ball.y&&
+        ball.y<(leftPaddle.y + paddleHeight + 6)&&
+        hittingRightNumber==1
     ) {
-        ball.dx *= -1;
+        hittingLefttNumber =1
+        hittingRightNumber =0
+        reverseMovmentDirection()
+        console.log("left")
     }
     if (
-        ball.x + ballSize / 2 >= rightPaddle.x &&
-        ball.y >= rightPaddle.y &&
-        ball.y <= rightPaddle.y + paddleHeight
+        ball.x >= rightPaddle.x -10&&
+        (rightPaddle.y-6)<ball.y&&
+        ball.y<(rightPaddle.y + paddleHeight + 6)&&
+        hittingLefttNumber ==1
     ) {
-        ball.dx *= -1;
+        hittingLefttNumber =0
+        hittingRightNumber =1
+        reverseMovmentDirection()
+        console.log("right")
     }
 
     // if the ball goes right or left
@@ -98,6 +121,7 @@ function moveBall() {
         resetBall();
     }
     if(ball.x + ballSize / 2 >= canvas.width){
+        console.log(ball.y,leftPaddle.y ,leftPaddle.y + paddleHeight)
         increaseRightPlayerScore()
         resetBall()
     }
