@@ -26,7 +26,7 @@ let rightPaddle = {
     x: canvas.width - paddleWidth - 10,
     y: canvas.height / 2 - paddleHeight / 2,
     dy: 0,
-    speed: screenWidthTh * 2.5
+    speed: screenWidthTh * 3
 };
 
 let ball = {

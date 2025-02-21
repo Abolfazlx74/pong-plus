@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #222;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.preview-container,
+.settings-container {
+    padding: 20px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+input, button {
+    display: block;
+    margin: 10px auto;
+    padding: 8px;
+}
+
+canvas {
+    background: black;
+    width: 200px;
+    height: 100px;
+    display: block;
+    margin: auto;
+    border: 2px solid white;
+}
