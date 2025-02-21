@@ -1,4 +1,5 @@
 const canvas = document.getElementById("pong-canvas");
+const body = document.querySelector("body");
 const ctx = canvas.getContext("2d");
 
 const screenWidthTh = screen.width / 1000;
@@ -36,6 +37,18 @@ let ball = {
     dy: ballSpeed * (Math.random() > 0.5 ? 1 : -1)
 };
 
+function setInitialSettings() {
+    const bgColor = localStorage.getItem("bgColor") || "#1f1f1f";
+    const gameColor = localStorage.getItem("gameColor") || "#000";
+    const paddleColor = localStorage.getItem("paddleColor") || "#fff";
+    body.style.backgroundColor = bgColor;
+    canvas.style.backgroundColor = gameColor;   
+    localStorage.setItem("bgColor", bgColor);
+    localStorage.setItem("gameColor", gameColor);
+    localStorage.setItem("paddleColor", paddleColor);
+}
+setInitialSettings();
+
 function updateScores() {
     lScoreContainer.innerHTML = rightPlayerScore;
     rScoreContainer.innerHTML = leftPlayerScore;
@@ -54,12 +67,12 @@ function increaseRightPlayerScore() {
 }
 
 function drawPaddle(paddle) {
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = localStorage.getItem("paddleColor");
     ctx.fillRect(paddle.x, paddle.y, paddleWidth, paddleHeight);
 }
 
 function drawBall() {
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = localStorage.getItem("ballColor") || "#fff";
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ballSize / 2, 0, Math.PI * 2);
     ctx.fill();
