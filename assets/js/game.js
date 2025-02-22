@@ -14,20 +14,20 @@ const lScoreContainer = document.getElementById("left-player-score");
 let rightPlayerScore = 0;
 const rScoreContainer = document.getElementById("right-player-score");
 let leftPlayerScore = 0;
-let ballSpeed = parseInt(screenWidthTh) * 1.5;
+let ballSpeed = parseInt(screenWidthTh) * 4;
 
 let leftPaddle = {
     x: 10,
     y: canvas.height / 2 - paddleHeight / 2,
     dy: 0,
-    speed: screenWidthTh * 2.5
+    speed: screenWidthTh * 5
 };
 
 let rightPaddle = {
     x: canvas.width - paddleWidth - 10,
     y: canvas.height / 2 - paddleHeight / 2,
     dy: 0,
-    speed: screenWidthTh * 3
+    speed: screenWidthTh * 5
 };
 
 let ball = {
@@ -53,7 +53,7 @@ function updateScores() {
     lScoreContainer.innerHTML = rightPlayerScore;
     rScoreContainer.innerHTML = leftPlayerScore;
     setHitsNumber();
-    ballSpeed = screenWidthTh * 1.5;
+    ballSpeed = screenWidthTh * 4;
 }
 
 function increaseLeftPlayerScore() {
@@ -94,10 +94,16 @@ function setHitsNumber() {
 }
 
 function reverseMovementDirection(paddle) {
-    ball.dx = ball.dx * -1;
-    ballSpeed += screenWidthTh / 8;
-    ball.dx = (ball.dx > 0 ? 1 : -1) * ballSpeed;
-    ball.dy = (ball.dy > 0 ? 1 : -1);
+    const impactPoint = (ball.y - paddle.y) / paddleHeight - 0.5;
+    const angle = impactPoint * Math.PI / 4;
+
+    ballSpeed += screenWidthTh;
+
+    const newDx = (ball.dx > 0 ? -1 : 1) * ballSpeed * Math.cos(angle);
+    const newDy = ballSpeed * Math.sin(angle);
+
+    ball.dx = newDx;
+    ball.dy = newDy;
 }
 
 function moveBall() {
@@ -110,32 +116,31 @@ function moveBall() {
     }
 
     // dealing with paddles
-    if (
-        ball.x <= leftPaddle.x + 10 &&
-        leftPaddle.y - 4 < ball.y &&
-        ball.y < leftPaddle.y + paddleHeight + 4 &&
-        hittingRightNumber == 1
-    ) {
-        hittingLefttNumber = 1;
-        hittingRightNumber = 0;
-        reverseMovementDirection(leftPaddle);
-    }
-    if (
-        ball.x >= rightPaddle.x - 10 &&
-        rightPaddle.y - 4 < ball.y &&
-        ball.y < rightPaddle.y + paddleHeight + 4 &&
-        hittingLefttNumber == 1
-    ) {
-        hittingLefttNumber = 0;
-        hittingRightNumber = 1;
-        reverseMovementDirection(rightPaddle);
+    let collided = false;
+    if (ball.dx < 0 && ball.x <= leftPaddle.x + paddleWidth) {
+        if (ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + paddleHeight) {
+            collided = true;
+            reverseMovementDirection(leftPaddle);
+        }
     }
 
-    // if the ball goes right or left
+    if (ball.dx > 0 && ball.x >= rightPaddle.x - ballSize) {
+        if (ball.y >= rightPaddle.y && ball.y <= rightPaddle.y + paddleHeight) {
+            collided = true;
+            reverseMovementDirection(rightPaddle);
+        }
+    }
+
+    if (collided) {
+        ball.x += ball.dx;
+        ball.y += ball.dy;
+    }
+
     if (ball.x - ballSize / 2 <= 0) {
         increaseLeftPlayerScore();
         resetBall();
     }
+
     if (ball.x + ballSize / 2 >= canvas.width) {
         increaseRightPlayerScore();
         resetBall();
