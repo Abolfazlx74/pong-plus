@@ -13,13 +13,19 @@ body {
     flex-wrap:wrap ;
 }
 
+.navigate-settings{
+    position: absolute;
+    left: .5%;
+    cursor: pointer;
+}
+
 .players-scores-container{
     color: white;
     height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: 80%;
 }   
 .players-scores-container h2{
     margin:  0 5% 0 5% ;

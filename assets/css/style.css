@@ -23,6 +23,7 @@ body {
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.5);
 }
+
 .preview-container{
     display: flex;
     flex-direction: column;
@@ -42,4 +43,8 @@ canvas {
     display: block;
     margin: auto;
     border: 2px solid white;
+}
+
+#game-speed{
+    width: 25%;
 }

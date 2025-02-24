@@ -2,6 +2,7 @@ const bgColorInput = document.getElementById("bg-color");
 const gameColorInput = document.getElementById("game-color");
 const paddleColorInput = document.getElementById("paddle-color");
 const ballColorInput = document.getElementById("ball-color");
+const gameSpeedInput = document.getElementById("game-speed")
 const previewContainer = document.querySelector(".preview-container");
 const previewText = document.getElementById("preview-text");
 
@@ -48,6 +49,7 @@ document.getElementById("start-game").addEventListener("click", () => {
     localStorage.setItem("paddleColor", paddleColorInput.value);
     localStorage.setItem("gameColor", gameColorInput.value);
     localStorage.setItem("ballColor", ballColorInput.value);
+    localStorage.setItem("gameSpeed", gameSpeedInput.value);
     window.location = "game.html";
 });
 

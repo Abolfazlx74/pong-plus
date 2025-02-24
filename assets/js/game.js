@@ -1,10 +1,12 @@
 const canvas = document.getElementById("pong-canvas");
 const body = document.querySelector("body");
+const settingsButton = document.querySelector(".navigate-settings")
 const ctx = canvas.getContext("2d");
 
 const screenWidthTh = screen.width / 1000;
 canvas.width = screenWidthTh * 650;
 canvas.height = screenWidthTh * 320;
+const gameSpeedController = localStorage.getItem("gameSpeed")*screenWidthTh/3 || screenWidthTh /3;
 
 const paddleWidth = 10;
 const paddleHeight = 100;
@@ -14,20 +16,21 @@ const lScoreContainer = document.getElementById("left-player-score");
 let rightPlayerScore = 0;
 const rScoreContainer = document.getElementById("right-player-score");
 let leftPlayerScore = 0;
-let ballSpeed = parseInt(screenWidthTh) * 4;
+let ballSpeed = gameSpeedController * 4;
+let ballSpeedIncreaser = gameSpeedController/2;
 
 let leftPaddle = {
     x: 10,
     y: canvas.height / 2 - paddleHeight / 2,
     dy: 0,
-    speed: screenWidthTh * 5
+    speed: gameSpeedController * 5
 };
 
 let rightPaddle = {
     x: canvas.width - paddleWidth - 10,
     y: canvas.height / 2 - paddleHeight / 2,
     dy: 0,
-    speed: screenWidthTh * 5
+    speed: gameSpeedController * 5
 };
 
 let ball = {
@@ -53,7 +56,7 @@ function updateScores() {
     lScoreContainer.innerHTML = rightPlayerScore;
     rScoreContainer.innerHTML = leftPlayerScore;
     setHitsNumber();
-    ballSpeed = screenWidthTh * 4;
+    ballSpeed = gameSpeedController * 4;
 }
 
 function increaseLeftPlayerScore() {
@@ -97,7 +100,8 @@ function reverseMovementDirection(paddle) {
     const impactPoint = (ball.y - paddle.y) / paddleHeight - 0.5;
     const angle = impactPoint * Math.PI / 4;
 
-    ballSpeed += screenWidthTh;
+    ballSpeed += ballSpeedIncreaser;
+    ballSpeedIncreaser *= 0.9;
 
     const newDx = (ball.dx > 0 ? -1 : 1) * ballSpeed * Math.cos(angle);
     const newDy = ballSpeed * Math.sin(angle);
@@ -118,14 +122,14 @@ function moveBall() {
     // dealing with paddles
     let collided = false;
     if (ball.dx < 0 && ball.x <= leftPaddle.x + paddleWidth) {
-        if (ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + paddleHeight) {
+        if (ball.y+4 >= leftPaddle.y && ball.y-4 <= leftPaddle.y + paddleHeight) {
             collided = true;
             reverseMovementDirection(leftPaddle);
         }
     }
 
-    if (ball.dx > 0 && ball.x >= rightPaddle.x - ballSize) {
-        if (ball.y >= rightPaddle.y && ball.y <= rightPaddle.y + paddleHeight) {
+    if (ball.dx && ball.x-10 >= rightPaddle.x - ballSize) {
+        if (ball.y+4 >= rightPaddle.y && ball.y <= rightPaddle.y-4 + paddleHeight) {
             collided = true;
             reverseMovementDirection(rightPaddle);
         }
@@ -172,6 +176,11 @@ function gameLoop() {
     draw();
     requestAnimationFrame(gameLoop);
 }
+
+// Navigate to settings page
+settingsButton.addEventListener('click', () => {
+    window.location = "index.html"
+})
 
 // control paddles by keys
 document.addEventListener("keydown", (e) => {
