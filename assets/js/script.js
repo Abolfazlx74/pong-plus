@@ -12,6 +12,14 @@ const ctx = previewCanvas.getContext("2d");
 previewCanvas.width = 200;
 previewCanvas.height = 100;
 
+function setInitialSettings(){
+    bgColorInput.value = localStorage.getItem("bgColor");
+    paddleColorInput.value = localStorage.getItem("paddleColor");
+    gameColorInput.value = localStorage.getItem("gameColor");
+    ballColorInput.value = localStorage.getItem("ballColor");
+    gameSpeedInput.value = localStorage.getItem("gameSpeed");
+}
+
 function drawPreview(setTextColor) {
     ctx.fillStyle = gameColorInput.value; 
     ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
@@ -27,9 +35,7 @@ function drawPreview(setTextColor) {
     ctx.arc(previewCanvas.width / 2, previewCanvas.height / 2, 5, 0, Math.PI * 2);
     ctx.fill();
 
-    if (setTextColor) {
-        previewText.style.color = invertColor(bgColorInput.value);
-    }
+    if (setTextColor) previewText.style.color = invertColor(bgColorInput.value);
 }
 
 function invertColor(hex) {
@@ -53,4 +59,5 @@ document.getElementById("start-game").addEventListener("click", () => {
     window.location = "game.html";
 });
 
+setInitialSettings();
 drawPreview();

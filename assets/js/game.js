@@ -1,3 +1,6 @@
+// ability idea : magnetic paddle(attract the ball and reflect it to any direction)
+// when user presses a key it goes to that direction indefinitely
+// dark map mode : give box shadow to paddles - same color for game bg and ball color - new setting options 
 const canvas = document.getElementById("pong-canvas");
 const body = document.querySelector("body");
 const settingsButton = document.querySelector(".navigate-settings")
@@ -18,19 +21,21 @@ const rScoreContainer = document.getElementById("right-player-score");
 let leftPlayerScore = 0;
 let ballSpeed = gameSpeedController * 4;
 let ballSpeedIncreaser = gameSpeedController/2;
+let hitTop = 0;
+let hitDown = 0;
 
 let leftPaddle = {
     x: 10,
     y: canvas.height / 2 - paddleHeight / 2,
     dy: 0,
-    speed: gameSpeedController * 5
+    speed: gameSpeedController * 5.5
 };
 
 let rightPaddle = {
     x: canvas.width - paddleWidth - 10,
     y: canvas.height / 2 - paddleHeight / 2,
     dy: 0,
-    speed: gameSpeedController * 5
+    speed: gameSpeedController * 5.5
 };
 
 let ball = {
@@ -57,6 +62,8 @@ function updateScores() {
     rScoreContainer.innerHTML = leftPlayerScore;
     setHitsNumber();
     ballSpeed = gameSpeedController * 4;
+    hitTop = 0;
+    hitDown = 0;
 }
 
 function increaseLeftPlayerScore() {
@@ -101,13 +108,16 @@ function reverseMovementDirection(paddle) {
     const angle = impactPoint * Math.PI / 4;
 
     ballSpeed += ballSpeedIncreaser;
-    ballSpeedIncreaser *= 0.9;
+    ballSpeedIncreaser *= 0.95;
+    hitAround = 0;
 
     const newDx = (ball.dx > 0 ? -1 : 1) * ballSpeed * Math.cos(angle);
     const newDy = ballSpeed * Math.sin(angle);
 
     ball.dx = newDx;
     ball.dy = newDy;
+    hitTop = 0;
+    hitDown = 0;
 }
 
 function moveBall() {
@@ -115,21 +125,31 @@ function moveBall() {
     ball.y += ball.dy;
 
     // hitting the balls with the top and bottom of the ground
-    if (ball.y - ballSize / 2 <= 0 || ball.y + ballSize / 2 >= canvas.height) {
+    if (ball.y - ballSize / 2 <= 0 && !hitTop ) {
         ball.dy *= -1;
+        hitTop = 1;
+        hitDown = 0;
+        console.log("Top")
+    }
+
+    if (ball.y + ballSize / 2 >= canvas.height && !hitDown ) {
+        ball.dy *= -1;
+        hitTop = 0;
+        hitDown = 1;
+        console.log("Bot")
     }
 
     // dealing with paddles
     let collided = false;
     if (ball.dx < 0 && ball.x <= leftPaddle.x + paddleWidth) {
-        if (ball.y+4 >= leftPaddle.y && ball.y-4 <= leftPaddle.y + paddleHeight) {
+        if (ball.y+6 >= leftPaddle.y && ball.y-4 <= leftPaddle.y + paddleHeight) {
             collided = true;
             reverseMovementDirection(leftPaddle);
         }
     }
 
     if (ball.dx && ball.x-10 >= rightPaddle.x - ballSize) {
-        if (ball.y+4 >= rightPaddle.y && ball.y <= rightPaddle.y-4 + paddleHeight) {
+        if (ball.y+6 >= rightPaddle.y && ball.y <= rightPaddle.y-4 + paddleHeight) {
             collided = true;
             reverseMovementDirection(rightPaddle);
         }
