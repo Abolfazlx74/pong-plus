@@ -5,6 +5,7 @@ const ballColorInput = document.getElementById("ball-color");
 const gameSpeedInput = document.getElementById("game-speed")
 const previewContainer = document.querySelector(".preview-container");
 const previewText = document.getElementById("preview-text");
+const pointsLimit = document.getElementById("points-limit")
 
 const previewCanvas = document.getElementById("preview-canvas");
 const ctx = previewCanvas.getContext("2d");
@@ -13,11 +14,12 @@ previewCanvas.width = 200;
 previewCanvas.height = 100;
 
 function setInitialSettings(){
-    bgColorInput.value = localStorage.getItem("bgColor");
-    paddleColorInput.value = localStorage.getItem("paddleColor");
-    gameColorInput.value = localStorage.getItem("gameColor");
-    ballColorInput.value = localStorage.getItem("ballColor");
-    gameSpeedInput.value = localStorage.getItem("gameSpeed");
+    bgColorInput.value = localStorage.getItem("bgColor") || bgColorInput.value;
+    paddleColorInput.value = localStorage.getItem("paddleColor") || paddleColorInput.value;
+    gameColorInput.value = localStorage.getItem("gameColor") || gameColorInput.value;
+    ballColorInput.value = localStorage.getItem("ballColor") || ballColorInput.value;
+    gameSpeedInput.value = localStorage.getItem("gameSpeed") || gameSpeedInput.value;
+    pointsLimit.value = localStorage.getItem("pointsLimit") ||  pointsLimit.value;
 }
 
 function drawPreview(setTextColor) {
@@ -56,6 +58,7 @@ document.getElementById("start-game").addEventListener("click", () => {
     localStorage.setItem("gameColor", gameColorInput.value);
     localStorage.setItem("ballColor", ballColorInput.value);
     localStorage.setItem("gameSpeed", gameSpeedInput.value);
+    localStorage.setItem("pointsLimit", pointsLimit.value);
     window.location = "game.html";
 });
 

@@ -9,15 +9,16 @@ const ctx = canvas.getContext("2d");
 const screenWidthTh = screen.width / 1000;
 canvas.width = screenWidthTh * 650;
 canvas.height = screenWidthTh * 320;
-const gameSpeedController = localStorage.getItem("gameSpeed")*screenWidthTh/3 || screenWidthTh /3;
+const gameSpeedController = localStorage.getItem("gameSpeed")*screenWidthTh/1.5 || screenWidthTh /3;
+const pointsLimit = localStorage.getItem("pointsLimit");
 
 const paddleWidth = 10;
 const paddleHeight = 100;
 const ballSize = 15;
 
 const lScoreContainer = document.getElementById("left-player-score");
-let rightPlayerScore = 0;
 const rScoreContainer = document.getElementById("right-player-score");
+let rightPlayerScore = 0;
 let leftPlayerScore = 0;
 let ballSpeed = gameSpeedController * 4;
 let ballSpeedIncreaser = gameSpeedController/2;
@@ -64,6 +65,12 @@ function updateScores() {
     ballSpeed = gameSpeedController * 4;
     hitTop = 0;
     hitDown = 0;
+    if (leftPlayerScore >= parseInt(pointsLimit)) {
+        finishGame("rightPlayer");
+    }
+    else if (rightPlayerScore >= parseInt(pointsLimit)) {
+        finishGame("leftPlayer");
+    }
 }
 
 function increaseLeftPlayerScore() {
@@ -195,6 +202,11 @@ function gameLoop() {
     update();
     draw();
     requestAnimationFrame(gameLoop);
+}
+
+function finishGame(player){
+    console.log(player,"won!");
+    location.href = "index.html";
 }
 
 // Navigate to settings page
