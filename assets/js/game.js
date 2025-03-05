@@ -5,11 +5,13 @@ const canvas = document.getElementById("pong-canvas");
 const body = document.querySelector("body");
 const settingsButton = document.querySelector(".navigate-settings")
 const ctx = canvas.getContext("2d");
+const playerNameContainer = document.getElementById("player-name")
+const gameOverContainer = document.querySelector(".game-over-container")
 
 const screenWidthTh = screen.width / 1000;
 canvas.width = screenWidthTh * 650;
 canvas.height = screenWidthTh * 320;
-const gameSpeedController = localStorage.getItem("gameSpeed")*screenWidthTh/1.5 || screenWidthTh /3;
+let gameSpeedController = localStorage.getItem("gameSpeed")*screenWidthTh/1.5 || screenWidthTh /3;
 const pointsLimit = localStorage.getItem("pointsLimit");
 
 const paddleWidth = 10;
@@ -205,7 +207,16 @@ function gameLoop() {
 }
 
 function finishGame(player){
-    console.log(player,"won!");
+    gameSpeedController = 1;
+    gameOverContainer.style.display = "flex";
+    playerNameContainer.innerHTML = `${player.split("Player")[0]}`;
+}
+
+function restartGame(){
+    location.href = "game.html";
+}
+
+function backToMenu(){
     location.href = "index.html";
 }
 

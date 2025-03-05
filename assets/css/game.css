@@ -55,3 +55,49 @@ canvas {
     background-color: #1f1f1f;
     margin-bottom: 20px;
 }
+
+.game-over-container{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.493);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    display: none;
+}
+
+.game-over-box{
+    width: 35%;
+    height: 30%;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background: rgba(255, 255, 255, 0.1);
+    border: solid #000 8px;
+    color: rgba(255, 255, 255, 0.863);
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+#winner{
+    font-size: 2rem;
+    width: 100%;
+    text-align: center;
+}
+
+.redirect{
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.781);
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 10px;
+    transition: 200ms;
+}
+.redirect:hover{
+    opacity: .8;
+}
