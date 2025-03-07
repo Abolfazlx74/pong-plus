@@ -13,6 +13,7 @@ canvas.width = screenWidthTh * 650;
 canvas.height = screenWidthTh * 320;
 let gameSpeedController = localStorage.getItem("gameSpeed")*screenWidthTh/1.5 || screenWidthTh /3;
 const pointsLimit = localStorage.getItem("pointsLimit");
+const gameMode = localStorage.getItem("gameMode");
 
 const paddleWidth = 10;
 const paddleHeight = 100;
@@ -86,9 +87,26 @@ function increaseRightPlayerScore() {
 }
 
 function drawPaddle(paddle) {
-    ctx.fillStyle = localStorage.getItem("paddleColor");
+    let paddleColor = localStorage.getItem("paddleColor") || "white";
+    if(gameMode=="dark"){
+        let gradient = ctx.createRadialGradient(
+            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 30,  
+            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 150 
+        );
+    
+        gradient.addColorStop(0, "rgba(0, 255, 0, 0.6)");  
+        gradient.addColorStop(1, "rgba(0, 255, 0, 0)");    
+    
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 150, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    ctx.fillStyle = paddleColor;
     ctx.fillRect(paddle.x, paddle.y, paddleWidth, paddleHeight);
 }
+
+
 
 function drawBall() {
     ctx.fillStyle = localStorage.getItem("ballColor") || "#fff";

@@ -20,17 +20,18 @@ body {
 .preview-container,
 .settings-container {
     padding: 20px;  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.5);
 }
 
-.preview-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+#more-settings{
+    
 }
 
-input, button {
+input, button, select {
     display: block;
     margin: 10px auto;
     padding: 8px;

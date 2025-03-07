@@ -5,14 +5,14 @@ const ballColorInput = document.getElementById("ball-color");
 const gameSpeedInput = document.getElementById("game-speed")
 const previewContainer = document.querySelector(".preview-container");
 const previewText = document.getElementById("preview-text");
-const pointsLimit = document.getElementById("points-limit")
+const pointsLimit = document.getElementById("points-limit");
 
 const previewCanvas = document.getElementById("preview-canvas");
 const ctx = previewCanvas.getContext("2d");
+let gameMode = document.getElementById("game-mode");
 
 previewCanvas.width = 200;
 previewCanvas.height = 100;
-
 function setInitialSettings(){
     bgColorInput.value = localStorage.getItem("bgColor") || bgColorInput.value;
     paddleColorInput.value = localStorage.getItem("paddleColor") || paddleColorInput.value;
@@ -20,6 +20,8 @@ function setInitialSettings(){
     ballColorInput.value = localStorage.getItem("ballColor") || ballColorInput.value;
     gameSpeedInput.value = localStorage.getItem("gameSpeed") || gameSpeedInput.value;
     pointsLimit.value = localStorage.getItem("pointsLimit") ||  pointsLimit.value;
+    gameMode.value = localStorage.getItem("gameMode") ||  gameMode.value;
+
 }
 
 function drawPreview(setTextColor) {
@@ -47,6 +49,18 @@ function invertColor(hex) {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
+function setGameMode(){
+    gameMode = document.getElementById("game-mode");
+    // console.log(gameMode.value)
+    // if(gameMode.value == "dark"){
+    //     ballColorInput.disabled = true;
+    // }
+    // else{
+    //     ballColorInput.disabled = false;
+    // }
+    
+}
+
 bgColorInput.addEventListener("input", () => drawPreview(true));
 gameColorInput.addEventListener("input", () => drawPreview(false)); 
 paddleColorInput.addEventListener("input", () => drawPreview(false));
@@ -59,6 +73,7 @@ document.getElementById("start-game").addEventListener("click", () => {
     localStorage.setItem("ballColor", ballColorInput.value);
     localStorage.setItem("gameSpeed", gameSpeedInput.value);
     localStorage.setItem("pointsLimit", pointsLimit.value);
+    localStorage.setItem("gameMode", gameMode.value);
     window.location = "game.html";
 });
 
