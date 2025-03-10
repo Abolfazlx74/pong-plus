@@ -9,7 +9,8 @@ const pointsLimit = document.getElementById("points-limit");
 
 const previewCanvas = document.getElementById("preview-canvas");
 const ctx = previewCanvas.getContext("2d");
-let gameMode = document.getElementById("game-mode");
+const gameMode = document.getElementById("game-mode");
+let isInvisible;
 
 previewCanvas.width = 200;
 previewCanvas.height = 100;
@@ -21,10 +22,10 @@ function setInitialSettings(){
     gameSpeedInput.value = localStorage.getItem("gameSpeed") || gameSpeedInput.value;
     pointsLimit.value = localStorage.getItem("pointsLimit") ||  pointsLimit.value;
     gameMode.value = localStorage.getItem("gameMode") ||  gameMode.value;
-
 }
 
-function drawPreview(setTextColor) {
+function drawPreview(setTextColor,isInvisible) {
+    if (isInvisible) ballColorInput.value = gameColorInput.value;
     ctx.fillStyle = gameColorInput.value; 
     ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 
@@ -50,19 +51,21 @@ function invertColor(hex) {
 }
 
 function setGameMode(){
-    gameMode = document.getElementById("game-mode");
-    // console.log(gameMode.value)
-    // if(gameMode.value == "dark"){
-    //     ballColorInput.disabled = true;
-    // }
-    // else{
-    //     ballColorInput.disabled = false;
-    // }
+    if (gameMode.value == "invisibleBall") {
+        ballColorInput.value = gameColorInput.value;
+        ballColorInput.disabled = true;
+        isInvisible = true;
+    } else {
+        ballColorInput.disabled = false;
+        isInvisible = false;
+    }
     
+    drawPreview(false)
 }
 
+
 bgColorInput.addEventListener("input", () => drawPreview(true));
-gameColorInput.addEventListener("input", () => drawPreview(false)); 
+gameColorInput.addEventListener("input", () => drawPreview(false,isInvisible)); 
 paddleColorInput.addEventListener("input", () => drawPreview(false));
 ballColorInput.addEventListener("input", () => drawPreview(false)); 
 
@@ -78,4 +81,5 @@ document.getElementById("start-game").addEventListener("click", () => {
 });
 
 setInitialSettings();
+setGameMode();
 drawPreview();

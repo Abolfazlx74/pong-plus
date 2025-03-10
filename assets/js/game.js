@@ -27,6 +27,7 @@ let ballSpeed = gameSpeedController * 4;
 let ballSpeedIncreaser = gameSpeedController/2;
 let hitTop = 0;
 let hitDown = 0;
+let hasFinished = 0;
 
 let leftPaddle = {
     x: 10,
@@ -68,11 +69,13 @@ function updateScores() {
     ballSpeed = gameSpeedController * 4;
     hitTop = 0;
     hitDown = 0;
-    if (leftPlayerScore >= parseInt(pointsLimit)) {
+    if (leftPlayerScore >= parseInt(pointsLimit) && !hasFinished) {
         finishGame("rightPlayer");
+        hasFinished = 1;
     }
-    else if (rightPlayerScore >= parseInt(pointsLimit)) {
+    else if (rightPlayerScore >= parseInt(pointsLimit) && !hasFinished) {
         finishGame("leftPlayer");
+        hasFinished = 1;
     }
 }
 
@@ -88,10 +91,10 @@ function increaseRightPlayerScore() {
 
 function drawPaddle(paddle) {
     let paddleColor = localStorage.getItem("paddleColor") || "white";
-    if(gameMode=="dark"){
+    if(gameMode=="invisibleBall"){
         let gradient = ctx.createRadialGradient(
-            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 30,  
-            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 150 
+            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 40,  
+            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 180 
         );
     
         gradient.addColorStop(0, "rgba(0, 255, 0, 0.6)");  
@@ -99,7 +102,7 @@ function drawPaddle(paddle) {
     
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 150, 0, Math.PI * 2);
+        ctx.arc(paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 180, 0, Math.PI * 2);
         ctx.fill();
     }
     ctx.fillStyle = paddleColor;
