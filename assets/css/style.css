@@ -43,6 +43,6 @@ canvas {
     border: 2px solid white;
 }
 
-#game-speed ,#points-limit{
+#game-speed ,#points-limit ,#light-zone ,#light-transparency{
     width: 25%;
 }

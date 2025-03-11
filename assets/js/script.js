@@ -2,14 +2,18 @@ const bgColorInput = document.getElementById("bg-color");
 const gameColorInput = document.getElementById("game-color");
 const paddleColorInput = document.getElementById("paddle-color");
 const ballColorInput = document.getElementById("ball-color");
-const gameSpeedInput = document.getElementById("game-speed")
+const gameSpeedInput = document.getElementById("game-speed");
+const lightColorInput = document.getElementById("light-color");
+const lightZoneInput = document.getElementById("light-zone");
 const previewContainer = document.querySelector(".preview-container");
 const previewText = document.getElementById("preview-text");
 const pointsLimit = document.getElementById("points-limit");
 
+
 const previewCanvas = document.getElementById("preview-canvas");
 const ctx = previewCanvas.getContext("2d");
 const gameMode = document.getElementById("game-mode");
+const moreSettings = document.querySelectorAll("#more-settings input")
 let isInvisible;
 
 previewCanvas.width = 200;
@@ -20,6 +24,8 @@ function setInitialSettings(){
     gameColorInput.value = localStorage.getItem("gameColor") || gameColorInput.value;
     ballColorInput.value = localStorage.getItem("ballColor") || ballColorInput.value;
     gameSpeedInput.value = localStorage.getItem("gameSpeed") || gameSpeedInput.value;
+    lightColorInput.value = localStorage.getItem("lightColor") || lightColorInput.value;
+    lightZoneInput.value = localStorage.getItem("lightZone") || lightZoneInput.value;
     pointsLimit.value = localStorage.getItem("pointsLimit") ||  pointsLimit.value;
     gameMode.value = localStorage.getItem("gameMode") ||  gameMode.value;
 }
@@ -55,9 +61,11 @@ function setGameMode(){
         ballColorInput.value = gameColorInput.value;
         ballColorInput.disabled = true;
         isInvisible = true;
+        moreSettings.forEach(element => {element.disabled = false});
     } else {
         ballColorInput.disabled = false;
         isInvisible = false;
+        moreSettings.forEach(element => {element.disabled = true});
     }
     
     drawPreview(false)
@@ -69,16 +77,18 @@ gameColorInput.addEventListener("input", () => drawPreview(false,isInvisible));
 paddleColorInput.addEventListener("input", () => drawPreview(false));
 ballColorInput.addEventListener("input", () => drawPreview(false)); 
 
-document.getElementById("start-game").addEventListener("click", () => {
+function startGame () {
     localStorage.setItem("bgColor", bgColorInput.value);
     localStorage.setItem("paddleColor", paddleColorInput.value);
     localStorage.setItem("gameColor", gameColorInput.value);
     localStorage.setItem("ballColor", ballColorInput.value);
     localStorage.setItem("gameSpeed", gameSpeedInput.value);
+    localStorage.setItem("lightColor", lightColorInput.value);
+    localStorage.setItem("lightZone", lightZoneInput.value);
     localStorage.setItem("pointsLimit", pointsLimit.value);
     localStorage.setItem("gameMode", gameMode.value);
     window.location = "game.html";
-});
+};
 
 setInitialSettings();
 setGameMode();

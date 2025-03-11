@@ -1,6 +1,11 @@
 // ability idea : magnetic paddle(attract the ball and reflect it to any direction)
 // when user presses a key it goes to that direction indefinitely
 // dark map mode : give box shadow to paddles - same color for game bg and ball color - new setting options 
+const bgColor = localStorage.getItem("bgColor") || "#1f1f1f";
+const gameColor = localStorage.getItem("gameColor") || "#000";
+const paddleColor = localStorage.getItem("paddleColor") || "#fff";
+const lightZone = localStorage.getItem("lightZone");
+const lightColor = localStorage.getItem("lightColor")  || "#008000"; 
 const canvas = document.getElementById("pong-canvas");
 const body = document.querySelector("body");
 const settingsButton = document.querySelector(".navigate-settings")
@@ -51,14 +56,13 @@ let ball = {
 };
 
 function setInitialSettings() {
-    const bgColor = localStorage.getItem("bgColor") || "#1f1f1f";
-    const gameColor = localStorage.getItem("gameColor") || "#000";
-    const paddleColor = localStorage.getItem("paddleColor") || "#fff";
     body.style.backgroundColor = bgColor;
     canvas.style.backgroundColor = gameColor;   
     localStorage.setItem("bgColor", bgColor);
     localStorage.setItem("gameColor", gameColor);
     localStorage.setItem("paddleColor", paddleColor);
+    localStorage.setItem("lightZone", lightZone);
+    localStorage.setItem("lightColor", lightColor);
 }
 setInitialSettings();
 
@@ -89,27 +93,33 @@ function increaseRightPlayerScore() {
     updateScores();
 }
 
+
+function hex2rgb(hex) {
+    let r = parseInt(hex.substring(1, 3), 16);
+    let g = parseInt(hex.substring(3, 5), 16);
+    let b = parseInt(hex.substring(5, 7), 16);
+    return [r,g,b];
+}
+
 function drawPaddle(paddle) {
-    let paddleColor = localStorage.getItem("paddleColor") || "white";
     if(gameMode=="invisibleBall"){
+        let paddleLC = lightZone || 1.3; //paddle light controller 
         let gradient = ctx.createRadialGradient(
-            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 40,  
-            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 180 
+            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, paddleLC * 30,  
+            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, paddleLC * 140 
         );
-    
-        gradient.addColorStop(0, "rgba(0, 255, 0, 0.6)");  
-        gradient.addColorStop(1, "rgba(0, 255, 0, 0)");    
-    
+         
+        convertedColor = hex2rgb(lightColor);
+        gradient.addColorStop(0, `rgba(${convertedColor[0]}, ${convertedColor[1]}, ${convertedColor[2]}, 0.6)`);  
+        gradient.addColorStop(1, `rgba(${convertedColor[0]}, ${convertedColor[1]}, ${convertedColor[2]}, 0)`);
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, 180, 0, Math.PI * 2);
+        ctx.arc(paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, paddleLC * 140, 0, Math.PI * 2);
         ctx.fill();
     }
     ctx.fillStyle = paddleColor;
     ctx.fillRect(paddle.x, paddle.y, paddleWidth, paddleHeight);
 }
-
-
 
 function drawBall() {
     ctx.fillStyle = localStorage.getItem("ballColor") || "#fff";

@@ -34,7 +34,7 @@
             <label for="points-limit">Points limit:</label>
             <input type="number" id="points-limit" min="1" step="1" value="10">
 
-            <button id="start-game">Start Game</button>
+            <button id="start-game" onclick="startGame()">Start Game</button>
         </div>
         <div class="settings-container" id="more-settings">
             <h2>More settings</h2>
@@ -43,6 +43,16 @@
                 <option value="normal">Normal</option>
                 <option value="invisibleBall">Invisible ball</option>
             </select>
+
+            <label for="light-color">Light color:</label>
+            <input type="color" id="light-color" value="#008000">
+
+            <label for="light-zone">Light zone(value):</label>
+            <input type="number" id="light-zone" min=".2" onchange="" step="0.1" value="1">
+
+            <!-- <label for="light-zone">Light transparency:</label>
+            <input type="number" id="light-transparency" min="100" onchange="" step="5" value="100"> -->
+
         </div>
     </div>
 
