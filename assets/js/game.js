@@ -6,6 +6,7 @@ const gameColor = localStorage.getItem("gameColor") || "#000";
 const paddleColor = localStorage.getItem("paddleColor") || "#fff";
 const lightZone = localStorage.getItem("lightZone");
 const lightColor = localStorage.getItem("lightColor")  || "#008000"; 
+const lightTransparency = localStorage.getItem("lightTransparency")  || 100; 
 const canvas = document.getElementById("pong-canvas");
 const body = document.querySelector("body");
 const settingsButton = document.querySelector(".navigate-settings")
@@ -105,8 +106,8 @@ function drawPaddle(paddle) {
     if(gameMode=="invisibleBall"){
         let paddleLC = lightZone || 1.3; //paddle light controller 
         let gradient = ctx.createRadialGradient(
-            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, paddleLC * 30,  
-            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, paddleLC * 140 
+            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, paddleLC * 30*(parseInt(lightTransparency)/100),  
+            paddle.x + paddleWidth / 2, paddle.y + paddleHeight / 2, paddleLC * 140
         );
          
         convertedColor = hex2rgb(lightColor);

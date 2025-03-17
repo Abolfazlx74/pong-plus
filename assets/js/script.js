@@ -1,3 +1,4 @@
+const inputs = document.querySelectorAll(".settings-container input");
 const bgColorInput = document.getElementById("bg-color");
 const gameColorInput = document.getElementById("game-color");
 const paddleColorInput = document.getElementById("paddle-color");
@@ -5,10 +6,10 @@ const ballColorInput = document.getElementById("ball-color");
 const gameSpeedInput = document.getElementById("game-speed");
 const lightColorInput = document.getElementById("light-color");
 const lightZoneInput = document.getElementById("light-zone");
+const lightTransparencyInput = document.getElementById("light-transparency");
 const previewContainer = document.querySelector(".preview-container");
 const previewText = document.getElementById("preview-text");
 const pointsLimit = document.getElementById("points-limit");
-
 
 const previewCanvas = document.getElementById("preview-canvas");
 const ctx = previewCanvas.getContext("2d");
@@ -19,15 +20,14 @@ let isInvisible;
 previewCanvas.width = 200;
 previewCanvas.height = 100;
 function setInitialSettings(){
-    bgColorInput.value = localStorage.getItem("bgColor") || bgColorInput.value;
-    paddleColorInput.value = localStorage.getItem("paddleColor") || paddleColorInput.value;
-    gameColorInput.value = localStorage.getItem("gameColor") || gameColorInput.value;
-    ballColorInput.value = localStorage.getItem("ballColor") || ballColorInput.value;
-    gameSpeedInput.value = localStorage.getItem("gameSpeed") || gameSpeedInput.value;
-    lightColorInput.value = localStorage.getItem("lightColor") || lightColorInput.value;
-    lightZoneInput.value = localStorage.getItem("lightZone") || lightZoneInput.value;
-    pointsLimit.value = localStorage.getItem("pointsLimit") ||  pointsLimit.value;
+    inputs.forEach(element =>{
+        element.value = localStorage.getItem(`${toCamelCase(element.id)}`) || element.value;
+    })
     gameMode.value = localStorage.getItem("gameMode") ||  gameMode.value;
+}
+
+function toCamelCase(i){
+    return i.replace(/-([a-z])/i, (_, letter) => letter.toUpperCase());
 }
 
 function drawPreview(setTextColor,isInvisible) {
@@ -66,6 +66,7 @@ function setGameMode(){
         ballColorInput.disabled = false;
         isInvisible = false;
         moreSettings.forEach(element => {element.disabled = true});
+        ballColorInput.value = localStorage.getItem("ballColor");
     }
     
     drawPreview(false)
@@ -78,15 +79,10 @@ paddleColorInput.addEventListener("input", () => drawPreview(false));
 ballColorInput.addEventListener("input", () => drawPreview(false)); 
 
 function startGame () {
-    localStorage.setItem("bgColor", bgColorInput.value);
-    localStorage.setItem("paddleColor", paddleColorInput.value);
-    localStorage.setItem("gameColor", gameColorInput.value);
-    localStorage.setItem("ballColor", ballColorInput.value);
-    localStorage.setItem("gameSpeed", gameSpeedInput.value);
-    localStorage.setItem("lightColor", lightColorInput.value);
-    localStorage.setItem("lightZone", lightZoneInput.value);
-    localStorage.setItem("pointsLimit", pointsLimit.value);
     localStorage.setItem("gameMode", gameMode.value);
+    inputs.forEach(element =>{
+        localStorage.setItem(`${toCamelCase(element.id)}`,element.value);
+    })
     window.location = "game.html";
 };
 
